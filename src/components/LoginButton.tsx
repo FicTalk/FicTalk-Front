@@ -12,8 +12,12 @@ import { CheckIcon } from "@radix-ui/react-icons";
 
 export default function GoogleLoginButton() {
   const router = useRouter();
+
   return (
     <GoogleLogin
+      logo_alignment={"center"}
+      shape={"rectangular"}
+      width={"full"}
       onSuccess={async (credentialResponse) => {
         await fetch("/api/auth/google", {
           method: "POST",
@@ -34,7 +38,6 @@ export default function GoogleLoginButton() {
       }}
       onError={() => {
         console.log("Login Failed");
-      }}
-    />
+      }}></GoogleLogin>
   );
 }
