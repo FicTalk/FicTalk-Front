@@ -3,9 +3,11 @@
 import { useSideMenuToggle } from "@/store/sidemenu";
 import { PiGithubLogo, PiInstagramLogo, PiUser, PiX, PiXLogo } from "react-icons/pi";
 import { AnimatePresence, motion } from "framer-motion";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useParams } from "next/navigation";
+import LogoutButton from "./LogoutButton";
 
 const P = ({ children, className }: { children: ReactNode; className?: string }) => {
   return <p className={cn("text-white/50 hover:text-white text-sm font-light", className)}>{children}</p>;
@@ -14,7 +16,7 @@ const P = ({ children, className }: { children: ReactNode; className?: string })
 const MyProfile = () => {
   return (
     <div className='flex items-center gap-2'>
-      <Link href={"/"} className='w-8 h-8 rounded-full bg-white' style={{ alignContent: "center" }}>
+      <Link href={"/profile"} className='w-8 h-8 rounded-full bg-white' style={{ alignContent: "center" }}>
         <PiUser className='text-black mx-auto' />
       </Link>
       <div>
@@ -25,9 +27,15 @@ const MyProfile = () => {
   );
 };
 
-export default function SideMenu() {
+export default function SideMenu({ isLogin }: { isLogin: boolean }) {
   const { toggle, onChange } = useSideMenuToggle();
+
+  const router = useParams();
   const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    onChange(false);
+  }, [router]);
 
   const modalOutSideClick = (e: any) => {
     if (ref.current === e.target) {
@@ -52,24 +60,27 @@ export default function SideMenu() {
             className='relative z-10 h-fit w-2/3 p-2 flex-1 bg-black flex flex-col justify-between'>
             <div className='flex flex-col gap-20'>
               <div className='flex justify-between'>
-                <P className='text-lg text-white font-bold'>TOONS</P>
+                <Link href={"/"} className='text-lg text-white font-bold'>
+                  TOONS
+                </Link>
                 <button onClick={() => onChange(false)}>
                   <PiX className='text-white text-lg' />
                 </button>
               </div>
               <div className='flex flex-col gap-10'>
-                {/** 로그아웃 상태일 때 */}
-                <div className='flex flex-col gap-1.5'>
-                  <P className='text-xs text-white/30 hover:text-white/30'>LOGIN</P>
-                  <Link href={"/"}>
-                    <P>로그인</P>
-                  </Link>
-                </div>
-                {/** 로그인 상태일 때 */}
-                <div className='flex flex-col gap-1.5'>
-                  <P className='text-xs text-white/30 hover:text-white/30'>MY PROFILE</P>
-                  <MyProfile />
-                </div>
+                {isLogin ? (
+                  <div className='flex flex-col gap-1.5'>
+                    <P className='text-xs text-white/30 hover:text-white/30'>MY PROFILE</P>
+                    <MyProfile />
+                  </div>
+                ) : (
+                  <div className='flex flex-col gap-1.5'>
+                    <P className='text-xs text-white/30 hover:text-white/30'>LOGIN</P>
+                    <Link href={"/login"}>
+                      <P>로그인</P>
+                    </Link>
+                  </div>
+                )}
                 <div className='flex flex-col gap-1.5'>
                   <P className='text-xs text-white/30 hover:text-white/30'>MENU</P>
                   <Link href={"/"}>
@@ -113,6 +124,7 @@ export default function SideMenu() {
                   <Link href='/'>
                     <P className='text-xs'>이용약관</P>
                   </Link>
+                  {isLogin ? <LogoutButton /> : null}
                 </div>
                 <P className='text-xs hover:text-white/50'>© 2024 웹툰 완결 알리미. All Rights Reserved.</P>
               </div>

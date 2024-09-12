@@ -4,6 +4,9 @@ import "./globals.css";
 import GNB from "@/components/GNB";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import SideMenu from "@/components/SideMenu";
+import GoogleLoginProvider from "@/components/GoogleLoginProvier";
+import { Toaster } from "@/components/ui/sonner";
+import { cookies } from "next/headers";
 
 const pretendard = localFont({
   src: "../assets/fonts/PretendardVariable.woff2",
@@ -28,16 +31,21 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = cookies();
+  const isLogin = cookieStore.get("auth-token");
   return (
     <html lang='ko' suppressHydrationWarning>
       <body className={`bg-side ${pretendard.className} antialiased`}>
-        <ThemeProvider attribute='class' defaultTheme='light' enableSystem={false} disableTransitionOnChange>
-          <div className='relative flex flex-col min-h-screen mx-auto w-[600px] min-h-screen bg-background'>
-            <SideMenu />
-            <GNB />
-            <main className='flex-1'>{children}</main>
-          </div>
-        </ThemeProvider>
+        <GoogleLoginProvider>
+          <ThemeProvider attribute='class' defaultTheme='light' enableSystem={false} disableTransitionOnChange>
+            <div className='relative flex flex-col min-h-screen mx-auto max-w-[600px] min-h-screen bg-background'>
+              <SideMenu isLogin={isLogin ? true : false} />
+              <GNB />
+              <main className='flex-1'>{children}</main>
+            </div>
+            <Toaster position='top-center' visibleToasts={1} richColors toastOptions={{ duration: 2000 }} />
+          </ThemeProvider>
+        </GoogleLoginProvider>
       </body>
     </html>
   );

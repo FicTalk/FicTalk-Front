@@ -1,7 +1,7 @@
 "use client";
 
 import { useSideMenuToggle } from "@/store/sidemenu";
-import { HamburgerMenuIcon } from "@radix-ui/react-icons";
+import { PiList } from "react-icons/pi";
 export default function SideMenuButton() {
   const { onChange } = useSideMenuToggle();
   const onClick = () => {
@@ -9,7 +9,7 @@ export default function SideMenuButton() {
   };
   return (
     <button onClick={onClick}>
-      <HamburgerMenuIcon className='text-white' />
+      <PiList className='text-white text-xl' />
     </button>
   );
 }
