@@ -17,7 +17,7 @@ export default function GoogleLoginButton() {
     <GoogleLogin
       logo_alignment={"center"}
       shape={"rectangular"}
-      width={"full"}
+      width={"220px"}
       onSuccess={async (credentialResponse) => {
         await fetch("/api/auth/google", {
           method: "POST",

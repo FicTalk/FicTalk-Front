@@ -11,8 +11,8 @@ const Kakao = () => {
   return (
     <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'>
       <path
-        fill-rule='evenodd'
-        clip-rule='evenodd'
+        fillRule='evenodd'
+        clipRule='evenodd'
         d='M9.96052 3C5.83983 3 2.5 5.59377 2.5 8.79351C2.5 10.783 3.79233 12.537 5.75942 13.5807L4.9313 16.6204C4.85835 16.8882 5.1634 17.1029 5.39883 16.9479L9.02712 14.5398C9.33301 14.5704 9.64386 14.587 9.96052 14.587C14.0812 14.587 17.421 11.9932 17.421 8.79351C17.421 5.59377 14.0812 3 9.96052 3Z'
         fill='black'></path>
     </svg>
@@ -22,7 +22,7 @@ const Kakao = () => {
 export default function Login() {
   const router = useRouter();
   return (
-    <div className='fixed z-0 w-full h-full bg-white max-w-[600px] overflow-hidden' style={{ alignContent: "center" }}>
+    <main className='flex-1 bg-white max-w-[600px] overflow-hidden' style={{ alignContent: "center" }}>
       <div className='transform -translate-y-1/2'>
         <p className='text-center text-4xl text-black font-bold'>TOONS.</p>
         <p className='text-center text-black/50'>툰즈에 오신 것을 환영합니다.</p>
@@ -38,6 +38,6 @@ export default function Login() {
           </button>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

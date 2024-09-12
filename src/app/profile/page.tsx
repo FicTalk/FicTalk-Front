@@ -42,7 +42,7 @@ export default async function Profile() {
 
   const data = await (await getData(authToken?.value)).json();
   return (
-    <div className='py-3 flex flex-col gap-5'>
+    <main className='flex-1 py-3 flex flex-col gap-5'>
       <div className='relative m-3 p-2 border rounded-lg'>
         <h3 className='absolute bg-white text-sm px-2 top-0 left-0 transform -translate-y-1/2'>내 정보</h3>
         <div className='mt-5 flex flex-col gap-3'>
@@ -74,6 +74,6 @@ export default async function Profile() {
         </div>
       </div>
       <LogoutButton />
-    </div>
+    </main>
   );
 }

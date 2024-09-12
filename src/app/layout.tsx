@@ -41,7 +41,7 @@ export default function RootLayout({
             <div className='relative flex flex-col min-h-screen mx-auto max-w-[600px] min-h-screen bg-background'>
               <SideMenu isLogin={isLogin ? true : false} />
               <GNB />
-              <main className='flex-1'>{children}</main>
+              {children}
             </div>
             <Toaster position='top-center' visibleToasts={1} richColors toastOptions={{ duration: 2000 }} />
           </ThemeProvider>
