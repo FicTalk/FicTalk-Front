@@ -18,6 +18,9 @@ export const metadata: Metadata = {
 
 /**
  * 다크 모드를 켤려면 default = 'system', enableSystem = true로 설정해주세요.
+ *
+ * text-disable-1 = text-white/50
+ * text-disable-2 = text-white/30
  */
 
 export default function RootLayout({

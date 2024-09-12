@@ -1,7 +1,7 @@
 "use client";
 
 import { useSideMenuToggle } from "@/store/sidemenu";
-import { PiGithubLogo, PiInstagramLogo, PiX, PiXLogo } from "react-icons/pi";
+import { PiGithubLogo, PiInstagramLogo, PiUser, PiX, PiXLogo } from "react-icons/pi";
 import { AnimatePresence, motion } from "framer-motion";
 import { ReactNode, useRef } from "react";
 import Link from "next/link";
@@ -9,6 +9,20 @@ import { cn } from "@/lib/utils";
 
 const P = ({ children, className }: { children: ReactNode; className?: string }) => {
   return <p className={cn("text-white/50 hover:text-white text-sm font-light", className)}>{children}</p>;
+};
+
+const MyProfile = () => {
+  return (
+    <div className='flex items-center gap-2'>
+      <Link href={"/"} className='w-8 h-8 rounded-full bg-white' style={{ alignContent: "center" }}>
+        <PiUser className='text-black mx-auto' />
+      </Link>
+      <div>
+        <P className='text-xs'>이름</P>
+        <P className='text-xs'>이메일</P>
+      </div>
+    </div>
+  );
 };
 
 export default function SideMenu() {
@@ -44,19 +58,22 @@ export default function SideMenu() {
                 </button>
               </div>
               <div className='flex flex-col gap-10'>
+                {/** 로그아웃 상태일 때 */}
                 <div className='flex flex-col gap-1.5'>
                   <P className='text-xs text-white/30 hover:text-white/30'>LOGIN</P>
                   <Link href={"/"}>
                     <P>로그인</P>
                   </Link>
                 </div>
+                {/** 로그인 상태일 때 */}
+                <div className='flex flex-col gap-1.5'>
+                  <P className='text-xs text-white/30 hover:text-white/30'>MY PROFILE</P>
+                  <MyProfile />
+                </div>
                 <div className='flex flex-col gap-1.5'>
                   <P className='text-xs text-white/30 hover:text-white/30'>MENU</P>
                   <Link href={"/"}>
                     <P>웹툰</P>
-                  </Link>
-                  <Link href={"/"}>
-                    <P>내정보</P> {/** 로그인이 되었을 땐 내정보 로그아웃 됬을 땐 내정보 */}
                   </Link>
                   <Link href={"/"}>
                     <P>자유 게시판</P>
@@ -97,7 +114,7 @@ export default function SideMenu() {
                     <P className='text-xs'>이용약관</P>
                   </Link>
                 </div>
-                <P className='text-xs'>© 2024 웹툰 완결 알리미. All Rights Reserved.</P>
+                <P className='text-xs hover:text-white/50'>© 2024 웹툰 완결 알리미. All Rights Reserved.</P>
               </div>
             </div>
           </motion.div>
