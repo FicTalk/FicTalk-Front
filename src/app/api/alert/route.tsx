@@ -27,3 +27,23 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json(await getData.json(), { status: 200 });
 }
+
+export async function POST(req: NextRequest) {
+  const webtoonId = await req.json();
+  const cookieStore = cookies();
+  const authToken = cookieStore.get("auth-token");
+  const getData = await fetch("https://api.woos.dev/api/alarms", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authToken?.value}`,
+    },
+    body: JSON.stringify({ webtoonId }),
+  });
+
+  if (!getData.ok) {
+    return NextResponse.json(getData.statusText, { status: getData.status });
+  }
+
+  return NextResponse.json("succses", { status: 200 });
+}

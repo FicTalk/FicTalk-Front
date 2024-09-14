@@ -16,6 +16,13 @@ async function getUser(url: string) {
   return getData.json();
 }
 
+async function updateUser(url: string, { arg }: { arg: { webtoonId: number } }) {
+  await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(arg.webtoonId),
+  });
+}
+
 async function deleteUser(url: string, { arg }: { arg: { webtoonId: number } }) {
   await fetch(url + `/${arg.webtoonId}`, {
     method: "DELETE",
@@ -23,8 +30,26 @@ async function deleteUser(url: string, { arg }: { arg: { webtoonId: number } }) 
   });
 }
 
-export default function useAlertWebtoon(trigger = true) {
-  const { data, isLoading, error } = useSWR(trigger ? "/api/alert" : null, getUser);
-  const { trigger: deleteAlert } = useSWRMutation(`/api/alert`, deleteUser);
-  return { data, isLoading, error, deleteAlert };
+function trigger() {
+  const { isLoading, data, error } = useSWR("/api/cookie", getUser);
+
+  if (isLoading) return false;
+  if (error) return false;
+
+  return data;
 }
+
+function useAlertWebtoons() {
+  const t = trigger();
+  return useSWR(t ? "/api/alert" : null, getUser);
+}
+
+function useDeleteAlertWebtoon() {
+  return useSWRMutation(`/api/alert`, deleteUser);
+}
+
+function useCreateAlertWebtoon() {
+  return useSWRMutation("/api/alert", updateUser);
+}
+
+export { useAlertWebtoons, useDeleteAlertWebtoon, useCreateAlertWebtoon };

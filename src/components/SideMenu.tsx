@@ -83,7 +83,7 @@ export default function SideMenu({ isLogin }: { isLogin: boolean }) {
                 )}
                 <div className='flex flex-col gap-1.5'>
                   <P className='text-xs text-white/30 hover:text-white/30'>MENU</P>
-                  <Link href={"/"}>
+                  <Link href={"/webtoons"}>
                     <P>웹툰</P>
                   </Link>
                   <Link href={"/"}>

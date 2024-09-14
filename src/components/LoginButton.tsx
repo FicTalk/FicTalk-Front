@@ -3,7 +3,7 @@
 import { toast } from "sonner";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
-import { CheckIcon } from "@radix-ui/react-icons";
+import { PiCheckCircleFill } from "react-icons/pi";
 
 /**
  * 에러일 때 에러 처리를 해줘야 함.
@@ -23,14 +23,15 @@ export default function GoogleLoginButton() {
           method: "POST",
           body: JSON.stringify({ idToken: credentialResponse.credential }),
         }).then(() => {
-          toast.success("로그인 완료", {
-            description: "환영합니다! 성공적으로 로그인되었습니다.",
+          toast.message("로그인이 되었습니다.", {
             duration: 1500,
-            icon: (
-              <div className='h-5 w-5 rounded-full bg-blue-500 flex items-center justify-center'>
-                <CheckIcon className='h-4 w-4 text-white' />
-              </div>
-            ),
+            icon: <PiCheckCircleFill className='text-xl text-white' />,
+            style: {
+              backgroundColor: "#3b82f6",
+              color: "white",
+              border: 0,
+              boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+            },
           });
           router.push("/");
           router.refresh();

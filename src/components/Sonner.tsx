@@ -1,6 +1,5 @@
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { PiCheck } from "react-icons/pi";
 
 /**
  * 알람 해제했을 때, 알람 설정했을 때, 로그인 했을 때, 로그아웃 했을 때
