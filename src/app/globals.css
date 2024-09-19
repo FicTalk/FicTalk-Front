@@ -118,3 +118,25 @@
     --radius: 0.5rem;
   }
 }
+
+.ql-editor {
+  flex-grow: 1;
+  font-size: 14px;
+  font-weight: 360;
+  padding: 8px !important;
+}
+
+.ql-snow {
+  border: none !important;
+}
+
+.ql-editor.ql-blank::before {
+  color: #a7adb8 !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  left: 8px !important;
+  pointer-events: none;
+  position: absolute;
+  right: 0 !important;
+  font-family: Pretendard !important;
+}

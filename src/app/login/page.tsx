@@ -2,6 +2,9 @@
 
 import GoogleLoginButton from "@/components/LoginButton";
 import { useRouter } from "next/navigation";
+import { PiCheckCircleFill } from "react-icons/pi";
+import KakaoLogin from "react-kakao-login";
+import { toast } from "sonner";
 /**
  * 디자인 해야함 v
  * 카카오 로그인 해야함
@@ -30,12 +33,49 @@ export default function Login() {
           <div className='mx-auto'>
             <GoogleLoginButton />
           </div>
-          <button
-            className='min-w-[220px] mx-auto flex gap-2 justify-center rounded py-2 items-center'
-            style={{ backgroundColor: "rgb(254, 229, 0)" }}>
-            <Kakao />
-            <p className='font-semibold'>카카오 로그인</p>
-          </button>
+          <KakaoLogin
+            style={{
+              padding: "2px 10px",
+            }}
+            token={process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID as string}
+            onSuccess={async (res) => {
+              const idToken = (res.response as never as { ["id_token"]: string }).id_token;
+              const nickname = res.profile!.properties.nickname;
+
+              await fetch("/api/auth/kakao", {
+                method: "POST",
+                body: JSON.stringify({ idToken, nickname }),
+              }).then(() => {
+                toast.message("로그인이 되었습니다.", {
+                  duration: 1500,
+                  icon: <PiCheckCircleFill className='text-xl text-white' />,
+                  style: {
+                    backgroundColor: "#3b82f6",
+                    color: "white",
+                    border: 0,
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+                  },
+                });
+
+                router.push("/");
+                router.refresh();
+              });
+            }}
+            onFail={console.error}
+            onLogout={console.info}
+            render={({ onClick }) => {
+              return (
+                <button
+                  onClick={onClick}
+                  className='min-w-[220px] mx-auto flex gap-2 justify-center rounded py-2 items-center'
+                  style={{ backgroundColor: "rgb(254, 229, 0)" }}>
+                  <Kakao />
+                  <p className='font-semibold'>카카오 로그인</p>
+                </button>
+              );
+            }}>
+            카카오로 로그인하기
+          </KakaoLogin>
         </div>
       </div>
     </main>

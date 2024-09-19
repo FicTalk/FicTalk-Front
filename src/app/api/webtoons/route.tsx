@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-
+/**
+ * 에러처리 해야함 없으면 그냥 빈배열 처리하면 될 듯
+ */
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
 

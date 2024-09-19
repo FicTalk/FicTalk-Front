@@ -8,10 +8,14 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import LogoutButton from "./LogoutButton";
+import useSWR from "swr";
+import { useUser } from "@/hooks/useUserInfo";
 
 const P = ({ children, className }: { children: ReactNode; className?: string }) => {
   return <p className={cn("text-white/50 hover:text-white text-sm font-light", className)}>{children}</p>;
 };
+
+const fetching = async (url: string) => await fetch(url).then((res) => res.json());
 
 const MyProfile = () => {
   return (
@@ -20,8 +24,7 @@ const MyProfile = () => {
         <PiUser className='text-black mx-auto' />
       </Link>
       <div>
-        <P className='text-xs'>이름</P>
-        <P className='text-xs'>이메일</P>
+        <P className='text-xs'>내 정보</P>
       </div>
     </div>
   );
@@ -29,7 +32,6 @@ const MyProfile = () => {
 
 export default function SideMenu({ isLogin }: { isLogin: boolean }) {
   const { toggle, onChange } = useSideMenuToggle();
-
   const router = useParams();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -86,7 +88,7 @@ export default function SideMenu({ isLogin }: { isLogin: boolean }) {
                   <Link href={"/webtoons"}>
                     <P>웹툰</P>
                   </Link>
-                  <Link href={"/"}>
+                  <Link href={"/posts"}>
                     <P>자유 게시판</P>
                   </Link>
                 </div>

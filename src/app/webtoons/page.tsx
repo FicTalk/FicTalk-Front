@@ -14,6 +14,10 @@ import { toast } from "sonner";
 import { usePageTotal } from "@/store/webtoons";
 import { usePagination } from "@/hooks/usePagination";
 
+/**
+ * 뭔가 아쉬운데...
+ */
+
 interface Webtoon {
   id: number;
   thumbnailUrl: string;
