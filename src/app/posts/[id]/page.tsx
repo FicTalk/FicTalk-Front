@@ -6,6 +6,9 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 import { PiHeartFill, PiUser } from "react-icons/pi";
 import { DeleteBtn } from "./client-conponent";
+import Container from "@/components/Container";
+import Title from "@/components/Title";
+import { Edit } from "lucide-react";
 
 /**
  * 1. 버튼을 눌렀을 때 /posts/:id/update로 리다이렉션
@@ -16,8 +19,8 @@ const ReDirectionBtn = ({ id }: { id: string }) => {
   return (
     <Link
       href={`/posts/${id}/edit`}
-      className='transition h-fit bg-black/50 text-white/50 hover:bg-black hover:text-white rounded px-2 py-1 text-sm'>
-      수정
+      className='transition h-fit bg-white text-black/80 hover:text-emerald-500 rounded p-1 text-sm'>
+      <Edit />
     </Link>
   );
 };
@@ -36,13 +39,19 @@ export default async function PostDetail({ params }: { params: { id: string } })
   const isAuthor = await isMyPost(post.username);
   const times = dayjs().diff(post.createdAt, "days");
   return (
-    <main className='pt-3 flex flex-col flex-1'>
+    <Container>
       <div className='border-b'>
         {post.tag ? <p className='text-xs text-black/50 font-medium px-2'>{post.tag}</p> : null}
-        <div className='flex gap-2 items-center pl-2'>
-          <BackForward />
-          <p className='text-base font-medium'>{post.title}</p>
+        <div className='flex justify-between'>
+          <Title>BOARD</Title>
+          {isAuthor ? (
+            <div className='flex gap-2'>
+              <ReDirectionBtn id={params.id} />
+              <DeleteBtn id={params.id} />
+            </div>
+          ) : null}
         </div>
+        <p className='text-sm pl-2 font-bold mt-5'>{post.title}</p>
         <div className='flex justify-between px-2'>
           <div className='flex gap-2 items-center'>
             <div className='bg-black/30 rounded-full w-fit p-0.5'>
@@ -51,12 +60,6 @@ export default async function PostDetail({ params }: { params: { id: string } })
             <p className='text-xs font-medium'>{post.username}</p>
             <p className='p-2 text-xs text-black/50 font-medium'>{times}일 전</p>
           </div>
-          {isAuthor ? (
-            <div className='flex gap-2'>
-              <ReDirectionBtn id={params.id} />
-              <DeleteBtn id={params.id} />
-            </div>
-          ) : null}
         </div>
       </div>
       <div className='p-2 flex-1'>
@@ -87,6 +90,6 @@ export default async function PostDetail({ params }: { params: { id: string } })
           제출
         </button>
       </div>
-    </main>
+    </Container>
   );
 }

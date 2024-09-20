@@ -16,9 +16,13 @@ export default function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 
+  if (pathname === "/posts/create" && !authToken) {
+    return NextResponse.redirect(new URL("/", request.url));
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/profile/:path*", "/login"],
+  matcher: ["/profile/:path*", "/posts/create", "/login"],
 };

@@ -2,7 +2,7 @@
 
 import Paginate from "@/components/Paginate";
 import { useItems } from "@/hooks/useWebtoons";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PiBellFill, PiCheckCircleFill, PiWarningCircleFill } from "react-icons/pi";
 import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParam";
 import React, { useCallback, useEffect, useMemo } from "react";
@@ -13,6 +13,9 @@ import Card from "@/components/Card";
 import { toast } from "sonner";
 import { usePageTotal } from "@/store/webtoons";
 import { usePagination } from "@/hooks/usePagination";
+import { ChevronLeft } from "lucide-react";
+import Title from "@/components/Title";
+import Container from "@/components/Container";
 
 /**
  * 뭔가 아쉬운데...
@@ -171,13 +174,14 @@ function Page() {
 
 export default function Webtoons() {
   return (
-    <div className='p-3 flex flex-col gap-1'>
+    <Container>
+      <Title>WEBTOONS</Title>
       <div className='flex gap-1'>
         <ComboBoxes />
       </div>
       <SearchWebtoon />
       <WebtoonList />
       <Page />
-    </div>
+    </Container>
   );
 }

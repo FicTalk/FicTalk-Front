@@ -56,6 +56,6 @@ export function useCreatePost(id: number, data: CreatePost) {
 export function usePutPost(id: number, data: PutPost) {
   return useSWRMutation(`/api/post/${id}`, (key) => putFetching(key, data));
 }
-export function useDeletePost(id: number) {
+export function useDeletePost(id: string) {
   return useSWRMutation(`/api/post/${id}`, deleteFetching);
 }

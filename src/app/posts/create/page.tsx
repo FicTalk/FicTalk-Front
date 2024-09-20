@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { usePostSubmit } from "@/hooks/usePostSubmit";
 import { Control } from "react-hook-form";
+import Title from "@/components/Title";
+import Container from "@/components/Container";
 type TitleInputProps = {
   control: Control<any>;
   updateField: (field: "title", value: string) => void;
@@ -48,8 +50,8 @@ const TitleInput: React.FC<TitleInputProps> = ({ control, updateField }) => {
       control={control}
       name='title'
       render={({ field, fieldState }) => (
-        <FormItem className='flex-[3] space-y-0 text-black/50'>
-          <FormLabel className='text-xs'>제목</FormLabel>
+        <FormItem className='flex-[3] space-y-0 text-black'>
+          <FormLabel className='text-xs text-black/50 pl-1'>제목</FormLabel>
           {/* {fieldState.error && <p className='text-red-500 text-xs mt-1'>{fieldState.error.message}</p>} */}
           <FormControl>
             <Input
@@ -77,8 +79,8 @@ const ContentTypeInput: React.FC<ContentTypeInputProps> = ({ control, updateFiel
       control={control}
       name='contentType'
       render={({ field }) => (
-        <FormItem className='flex-1 space-y-0'>
-          <FormLabel className='text-xs text-black/50'>태그</FormLabel>
+        <FormItem className='flex-1 space-y-0 text-black'>
+          <FormLabel className='text-xs text-black/50 pl-1'>태그</FormLabel>
           <Select onValueChange={(value) => updateField("contentType", value)} defaultValue={field.value}>
             <FormControl>
               <SelectTrigger>
@@ -113,14 +115,22 @@ const PostCreatePage: React.FC = () => {
   );
 
   return (
-    <div className='p-2 flex-1 flex flex-col'>
+    <Container>
+      <div className='flex justify-between'>
+        <Title>CREATE</Title>
+        <button
+          onClick={form.handleSubmit(onSubmit)}
+          className='bg-black/80 px-5 rounded text-white/80 font-medium hover:text-white hover:bg-black transition h-fit py-1'>
+          작성
+        </button>
+      </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 flex flex-col flex-1'>
+        <form onSubmit={(e) => e.preventDefault()} className='space-y-8 flex flex-col flex-1'>
           {formFields}
           <QuillInput control={form.control} updateField={updateField} />
         </form>
       </Form>
-    </div>
+    </Container>
   );
 };
 

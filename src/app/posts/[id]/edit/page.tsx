@@ -2,6 +2,8 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import PostCreatePage from "../client-conponent";
 import { Post } from "@/types/Posts";
+import Container from "@/components/Container";
+import Title from "@/components/Title";
 
 const fetching = async (url: string) => {
   return (
@@ -37,5 +39,10 @@ export default async function PostUpdate({ params }: { params: { id: string } })
   const isAuthor = await isMyPost(post.username);
 
   if (!isAuthor) return redirect("/");
-  return <PostCreatePage initialValues={post} id={params.id} />;
+  return (
+    <Container>
+      <Title>BOARD</Title>
+      <PostCreatePage initialValues={post} id={params.id} />
+    </Container>
+  );
 }

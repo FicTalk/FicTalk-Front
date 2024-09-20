@@ -12,6 +12,7 @@ import { ContentTypeInputProps, QuillInputProps, TitleInputProps } from "@/types
 import { useDeletePost } from "@/hooks/usePost";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
 
 const firstTag = [
   { label: "일반", value: "GENERAL" },
@@ -133,9 +134,9 @@ const PostCreatePage = ({ initialValues, id }: { initialValues: { title: string;
   );
 };
 
-export const DeleteBtn = ({ id }: { id: number }) => {
+export const DeleteBtn = ({ id }: { id: string }) => {
   const router = useRouter();
-  const { trigger } = useDeletePost(id);
+  const { trigger, isMutating } = useDeletePost(id);
 
   const onClick = async () => {
     await trigger().then(() => {
@@ -148,8 +149,11 @@ export const DeleteBtn = ({ id }: { id: number }) => {
   };
 
   return (
-    <button onClick={onClick} className='h-fit bg-black/50 text-white/50 hover:bg-black rounded px-2 py-1 text-sm'>
-      삭제
+    <button
+      onClick={onClick}
+      disabled={isMutating}
+      className='h-fit text-black/80 p-1 hover:text-red-500 rounded text-sm'>
+      <Trash2 />
     </button>
   );
 };

@@ -8,5 +8,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   const cookieStore = cookies();
-  return NextResponse.json(cookieStore.get("auth-token") ? true : false, { status: 200 });
+  const getCookie = cookieStore.get("auth-token");
+
+  if (!getCookie) {
+    return NextResponse.json(false, { status: 403 });
+  }
+
+  return NextResponse.json(true, { status: 200 });
 }

@@ -16,7 +16,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export const usePostSubmit = (postId: string) => {
+export const usePostSubmit = (postId?: string) => {
   const postPost = async (url: string, { arg }: { arg: { post: FormData } }) => {
     const response = await fetch("/api/post?boardId=1", {
       method: "POST",

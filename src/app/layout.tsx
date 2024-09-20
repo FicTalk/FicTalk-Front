@@ -33,6 +33,7 @@ export default function RootLayout({
 }>) {
   const cookieStore = cookies();
   const isLogin = cookieStore.get("auth-token");
+
   return (
     <html lang='ko' suppressHydrationWarning>
       <body className={`bg-side ${pretendard.className} antialiased`}>
@@ -40,8 +41,8 @@ export default function RootLayout({
           <ThemeProvider attribute='class' defaultTheme='light' enableSystem={false} disableTransitionOnChange>
             <div className='relative flex flex-col min-h-screen mx-auto max-w-[600px] min-h-screen bg-background'>
               <SideMenu isLogin={isLogin ? true : false} />
-              <GNB />
               {children}
+              <GNB />
             </div>
             <Toaster position='top-center' visibleToasts={1} richColors toastOptions={{ duration: 2000 }} />
           </ThemeProvider>
