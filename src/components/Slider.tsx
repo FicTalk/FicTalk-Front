@@ -3,7 +3,6 @@
 import { Webtoon } from "@/types/webtoon";
 import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import Image from "next/image";
 
 export default function Slider({ datas }: { datas: Webtoon[] }) {
   return (

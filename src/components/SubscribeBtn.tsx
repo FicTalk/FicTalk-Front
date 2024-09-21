@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { toast } from "sonner";
-import useSWR from "swr";
-import useSWRMutation, { TriggerWithoutArgs } from "swr/mutation";
+import useSWRMutation from "swr/mutation";
 
 const toastStyles = {
   base: {
@@ -19,10 +18,6 @@ export default function SubscribeBtn({ isSubscribe }: { isSubscribe: boolean }) 
   const { data, trigger, isMutating } = useSWRMutation("/api/members/subscribe", () =>
     fetching(isSubscribe ? "/api/members/unSubscribe" : "/api/members/subscribe")
   );
-
-  useEffect(() => {
-    console.log(data);
-  }, [isMutating]);
 
   const onClick = async () => {
     await trigger()

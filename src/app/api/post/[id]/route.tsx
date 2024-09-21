@@ -5,7 +5,6 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
   const cookieStore = cookies();
   const authToken = cookieStore.get("auth-token");
 
-  console.log(params.id);
   const getData = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/posts/${params.id}`, {
     method: "DELETE",
     headers: {
@@ -23,7 +22,6 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
   const data = await req.json();
-  console.log(params.id);
   const cookieStore = cookies();
   const authToken = cookieStore.get("auth-token");
 
@@ -41,4 +39,14 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
   }
 
   return NextResponse.json("success", { status: 200 });
+}
+
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+  const getData = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/posts/${params.id}`);
+
+  if (!getData.ok) {
+    return NextResponse.json(getData.statusText, { status: getData.status });
+  }
+
+  return NextResponse.json(await getData.json(), { status: 200 });
 }

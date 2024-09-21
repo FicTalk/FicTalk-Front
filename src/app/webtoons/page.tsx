@@ -2,7 +2,7 @@
 
 import Paginate from "@/components/Paginate";
 import { useItems } from "@/hooks/useWebtoons";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { PiBellFill, PiCheckCircleFill, PiWarningCircleFill } from "react-icons/pi";
 import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParam";
 import React, { useCallback, useEffect, useMemo } from "react";
@@ -13,21 +13,13 @@ import Card from "@/components/Card";
 import { toast } from "sonner";
 import { usePageTotal } from "@/store/webtoons";
 import { usePagination } from "@/hooks/usePagination";
-import { ChevronLeft } from "lucide-react";
 import Title from "@/components/Title";
 import Container from "@/components/Container";
+import { Webtoon } from "@/types/webtoon";
 
 /**
  * 뭔가 아쉬운데...
  */
-
-interface Webtoon {
-  id: number;
-  thumbnailUrl: string;
-  title: string;
-  daysOfWeek: string;
-  platform: string;
-}
 
 interface Alert {
   id: number;
@@ -99,13 +91,11 @@ function WebtoonList() {
   }, [data]);
 
   return (
-    <>
-      <div className='grid grid-cols-3 gap-1'>
-        {data?.content.map((item: Webtoon) => (
-          <Card key={item.id} item={item} button={renderAlertButton(item)} />
-        ))}
-      </div>
-    </>
+    <div className='grid grid-cols-3 gap-1'>
+      {data?.content.map((item: Webtoon) => (
+        <Card key={item.id} item={item} button={renderAlertButton(item)} />
+      ))}
+    </div>
   );
 }
 

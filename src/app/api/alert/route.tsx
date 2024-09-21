@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   const cookieStore = cookies();
   const authToken = cookieStore.get("auth-token");
 

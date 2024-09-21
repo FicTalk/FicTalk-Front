@@ -16,8 +16,8 @@ export function Combobox({
   defaultValue,
   onChange,
 }: {
-  list: any;
-  role: any;
+  list: { label: string; value: string }[];
+  role: { label: string; value: string };
   defaultValue: string | null;
   onChange: (role: string, value: string) => void;
 }) {

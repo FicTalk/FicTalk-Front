@@ -30,7 +30,7 @@ async function deleteUser(url: string, { arg }: { arg: { webtoonId: number } }) 
   });
 }
 
-function trigger() {
+function useTrigger() {
   const { isLoading, data, error } = useSWR("/api/cookie", getUser);
 
   if (isLoading) return false;
@@ -40,7 +40,7 @@ function trigger() {
 }
 
 function useAlertWebtoons() {
-  const t = trigger();
+  const t = useTrigger();
   return useSWR(t ? "/api/alert" : null, getUser);
 }
 

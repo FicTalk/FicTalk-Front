@@ -1,8 +1,9 @@
 import { getDayInKorean } from "@/lib/strings";
 import PlatformBadge from "./PlatformBadge";
 import { ReactNode } from "react";
+import { Webtoon } from "@/types/webtoon";
 
-export default function Card({ item, button }: { item: any; button: ReactNode }) {
+export default function Card({ item, button }: { item: Webtoon; button: ReactNode }) {
   return (
     <div key={item.id} className='border rounded'>
       <div className='relative'>

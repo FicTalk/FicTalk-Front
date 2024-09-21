@@ -1,42 +1,50 @@
-import BackForward from "@/components/BackForward";
-import { getMe, getPost } from "@/lib/helper";
-import { Post } from "@/types/Posts";
+"use client";
+
 import dayjs from "dayjs";
-import { cookies } from "next/headers";
 import Link from "next/link";
 import { PiHeartFill, PiUser } from "react-icons/pi";
-import { DeleteBtn } from "./client-conponent";
 import Container from "@/components/Container";
 import Title from "@/components/Title";
-import { Edit } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
+import { useDeletePost, useGetPost } from "@/hooks/usePost";
+import { useUserInfo } from "@/hooks/useUserInfo";
+import DOMPurify from "dompurify";
 
-/**
- * 1. 버튼을 눌렀을 때 /posts/:id/update로 리다이렉션
- * 2.
- */
+const EditBtn = ({ id, post }: { id: string; post: { username: string } }) => {
+  const { data, isLoading, error } = useUserInfo();
 
-const ReDirectionBtn = ({ id }: { id: string }) => {
-  return (
+  if (isLoading) return <></>;
+  if (error) return <></>;
+  return data.name === post.username ? (
     <Link
       href={`/posts/${id}/edit`}
       className='transition h-fit bg-white text-black/80 hover:text-emerald-500 rounded p-1 text-sm'>
       <Edit />
     </Link>
-  );
+  ) : null;
 };
 
-const isMyPost = async (email: string) => {
-  const cookieStore = cookies();
-  const token = cookieStore.get("auth-token");
-  if (!token) return false;
+const DeleteBtn = ({ post }: { post: { username: string } }) => {
+  const { trigger, isMutating } = useDeletePost();
+  const { data, isLoading, error } = useUserInfo();
+  if (isLoading) return <></>;
+  if (error) return <></>;
 
-  const { name } = await getMe(token.value);
-  return email === name ? true : false;
+  return data.name === post.username ? (
+    <button
+      onClick={() => trigger()}
+      disabled={isMutating}
+      className='h-fit text-black/80 p-1 hover:text-red-500 rounded text-sm'>
+      <Trash2 />
+    </button>
+  ) : null;
 };
 
-export default async function PostDetail({ params }: { params: { id: string } }) {
-  const post: Post = await getPost(params.id);
-  const isAuthor = await isMyPost(post.username);
+export default function PostDetail({ params }: { params: { id: string } }) {
+  const { data: post, isLoading, error } = useGetPost();
+
+  if (isLoading) return <></>;
+  if (error) return <></>;
   const times = dayjs().diff(post.createdAt, "days");
   return (
     <Container>
@@ -44,12 +52,10 @@ export default async function PostDetail({ params }: { params: { id: string } })
         {post.tag ? <p className='text-xs text-black/50 font-medium px-2'>{post.tag}</p> : null}
         <div className='flex justify-between'>
           <Title>BOARD</Title>
-          {isAuthor ? (
-            <div className='flex gap-2'>
-              <ReDirectionBtn id={params.id} />
-              <DeleteBtn id={params.id} />
-            </div>
-          ) : null}
+          <div className='flex gap-2'>
+            <EditBtn id={params.id} post={post} />
+            <DeleteBtn post={post} />
+          </div>
         </div>
         <p className='text-sm pl-2 font-bold mt-5'>{post.title}</p>
         <div className='flex justify-between px-2'>
@@ -71,7 +77,7 @@ export default async function PostDetail({ params }: { params: { id: string } })
               minHeight: "300px",
             }}
             dangerouslySetInnerHTML={{
-              __html: post.content,
+              __html: DOMPurify.sanitize(post.content),
             }}
           />
         )}

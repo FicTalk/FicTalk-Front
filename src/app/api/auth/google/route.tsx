@@ -1,11 +1,6 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-/**
- * idToken과 함께 서버쪽으로 회원가입 요청을 보내면 됩니다.
- * 응답으로 token이 발행이 되면 쿠키에 저장을 합니다.
- * KEY는 auth-token 입니다.
- */
 export async function POST(req: NextRequest) {
   const { idToken } = await req.json();
   const cookieStore = cookies();
@@ -27,7 +22,7 @@ export async function POST(req: NextRequest) {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    maxAge: 60 * 60, // 1 hour in seconds
+    maxAge: 60 * 60 * 24,
     path: "/",
   });
 

@@ -1,48 +1,31 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import PostCreatePage from "../client-conponent";
-import { Post } from "@/types/Posts";
-import Container from "@/components/Container";
+// PostCreatePage.tsx
+"use client";
+
 import Title from "@/components/Title";
+import PostCreatePage from "@/components/Editor";
+import { useGetPost } from "@/hooks/usePost";
+import { PiEyesFill } from "react-icons/pi";
+import { useUserInfo } from "@/hooks/useUserInfo";
 
-const fetching = async (url: string) => {
+const 잘못된접근 = () => {
   return (
-    await fetch(process.env.NEXT_PUBLIC_API_URL + `/` + url, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: "no-cache",
-    })
-  ).json();
+    <main className='flex-1 pb-[80px]' style={{ alignContent: "center" }}>
+      <PiEyesFill className='text-6xl text-black mx-auto' />
+      <p className='text-black font-bold text-center'>잘못된 접근입니다.</p>
+    </main>
+  );
 };
 
-const isMyPost = async (email: string) => {
-  const cookieStore = cookies();
-  const token = cookieStore.get("auth-token");
-
-  if (!token) return false;
-
-  const getData = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/members/me", {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token.value}`,
-    },
-    next: { revalidate: 0 },
-  });
-
-  const { name } = await getData.json();
-  return email === name ? true : false;
-};
-
-export default async function PostUpdate({ params }: { params: { id: string } }) {
-  const post: Post = await fetching(`api/posts/${params.id}`);
-  const isAuthor = await isMyPost(post.username);
-
-  if (!isAuthor) return redirect("/");
-  return (
-    <Container>
-      <Title>BOARD</Title>
-      <PostCreatePage initialValues={post} id={params.id} />
-    </Container>
+export default function EditPost() {
+  const { data, isLoading, error } = useGetPost();
+  const { data: profile, isLoading: profileLoading, error: profileError } = useUserInfo();
+  if (isLoading || profileLoading) return <></>;
+  if (error || profileError) return <></>;
+  return data.username === profile.name ? (
+    <PostCreatePage initialValue={data}>
+      <Title>EDIT</Title>
+    </PostCreatePage>
+  ) : (
+    <잘못된접근 />
   );
 }

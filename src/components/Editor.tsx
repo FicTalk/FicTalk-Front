@@ -1,36 +1,32 @@
-// PostCreatePage.tsx
 "use client";
 
-import React, { useEffect, useMemo } from "react";
+import React, { ReactNode, useEffect, useMemo } from "react";
 import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { usePostSubmit } from "@/hooks/usePostSubmit";
-import { ContentTypeInputProps, QuillInputProps, TitleInputProps } from "@/types/Posts";
-import { useDeletePost } from "@/hooks/usePost";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
+import { Control } from "react-hook-form";
+import Container from "@/components/Container";
+
+type TitleInputProps = {
+  control: Control<any>;
+  updateField: (field: "title", value: string) => void;
+};
 
 const firstTag = [
   { label: "일반", value: "GENERAL" },
   { label: "기타", value: "OTHER" },
 ];
 
-const toastStyles = {
-  base: {
-    color: "white",
-    border: 0,
-    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
-  },
-  success: { backgroundColor: "#3b82f6" },
-  warning: { backgroundColor: "#f59e0b" },
-  error: { backgroundColor: "#ef4444" },
+type QuillInputProps = {
+  control: Control<any>;
+  updateField: (field: "content", value: string) => void;
+  initialContent?: string;
 };
 
-const QuillInput: React.FC<QuillInputProps> = ({ updateField, initialValue }) => {
+const QuillInput = ({ updateField, initialContent }: QuillInputProps) => {
   const { quill, quillRef } = useQuill({
     modules: { toolbar: false },
     formats: null,
@@ -39,8 +35,8 @@ const QuillInput: React.FC<QuillInputProps> = ({ updateField, initialValue }) =>
 
   useEffect(() => {
     if (quill) {
-      if (initialValue) {
-        quill.clipboard.dangerouslyPasteHTML(initialValue);
+      if (initialContent) {
+        quill.clipboard.dangerouslyPasteHTML(initialContent);
       }
       quill.on("text-change", () => {
         updateField("content", quill.root.innerHTML);
@@ -51,14 +47,14 @@ const QuillInput: React.FC<QuillInputProps> = ({ updateField, initialValue }) =>
   return <div ref={quillRef} className='h-full flex flex-col flex-1 text-base'></div>;
 };
 
-const TitleInput: React.FC<TitleInputProps> = ({ control, updateField }) => {
+const TitleInput = ({ control, updateField }: TitleInputProps) => {
   return (
     <FormField
       control={control}
       name='title'
       render={({ field, fieldState }) => (
-        <FormItem className='flex-[3] space-y-0 text-black/50'>
-          <FormLabel className='text-xs'>제목</FormLabel>
+        <FormItem className='flex-[3] space-y-0 text-black'>
+          <FormLabel className='text-xs text-black/50 pl-1'>제목</FormLabel>
           {/* {fieldState.error && <p className='text-red-500 text-xs mt-1'>{fieldState.error.message}</p>} */}
           <FormControl>
             <Input
@@ -75,14 +71,19 @@ const TitleInput: React.FC<TitleInputProps> = ({ control, updateField }) => {
   );
 };
 
-const ContentTypeInput: React.FC<ContentTypeInputProps> = ({ control, updateField }) => {
+type ContentTypeInputProps = {
+  control: Control<any>;
+  updateField: (field: "contentType", value: string) => void;
+};
+
+const ContentTypeInput = ({ control, updateField }: ContentTypeInputProps) => {
   return (
     <FormField
       control={control}
       name='contentType'
       render={({ field }) => (
-        <FormItem className='flex-1 space-y-0'>
-          <FormLabel className='text-xs text-black/50'>태그</FormLabel>
+        <FormItem className='flex-1 space-y-0 text-black'>
+          <FormLabel className='text-xs text-black/50 pl-1'>태그</FormLabel>
           <Select onValueChange={(value) => updateField("contentType", value)} defaultValue={field.value}>
             <FormControl>
               <SelectTrigger>
@@ -103,8 +104,16 @@ const ContentTypeInput: React.FC<ContentTypeInputProps> = ({ control, updateFiel
   );
 };
 
-const PostCreatePage = ({ initialValues, id }: { initialValues: { title: string; content: string }; id: string }) => {
-  const { form, onSubmit, updateField } = usePostSubmit(id);
+const PostCreatePage = ({
+  children,
+
+  initialValue,
+}: {
+  children: ReactNode;
+
+  initialValue?: { title: string; content: string };
+}) => {
+  const { form, onSubmit, updateField } = usePostSubmit();
 
   const formFields = useMemo(
     () => (
@@ -117,44 +126,29 @@ const PostCreatePage = ({ initialValues, id }: { initialValues: { title: string;
   );
 
   useEffect(() => {
-    if (initialValues) {
-      updateField("title", initialValues.title);
+    if (initialValue) {
+      updateField("title", initialValue.title);
+      updateField("content", initialValue.content);
     }
-  }, []);
+  }, [initialValue]);
 
   return (
-    <div className='p-2 flex-1 flex flex-col'>
+    <Container>
+      <div className='flex justify-between'>
+        {children}
+        <button
+          onClick={form.handleSubmit(onSubmit)}
+          className='bg-black/80 px-5 rounded text-white/80 font-medium hover:text-white hover:bg-black transition h-fit py-1'>
+          작성
+        </button>
+      </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 flex flex-col flex-1'>
+        <form onSubmit={(e) => e.preventDefault()} className='space-y-8 flex flex-col flex-1'>
           {formFields}
-          <QuillInput control={form.control} updateField={updateField} initialValue={initialValues?.content} />
+          <QuillInput control={form.control} updateField={updateField} initialContent={initialValue?.content} />
         </form>
       </Form>
-    </div>
-  );
-};
-
-export const DeleteBtn = ({ id }: { id: string }) => {
-  const router = useRouter();
-  const { trigger, isMutating } = useDeletePost(id);
-
-  const onClick = async () => {
-    await trigger().then(() => {
-      router.push("/posts");
-      toast.success("성공적으로 삭제되었습니다.", {
-        duration: 1500,
-        style: { ...toastStyles.base, ...toastStyles.success },
-      });
-    });
-  };
-
-  return (
-    <button
-      onClick={onClick}
-      disabled={isMutating}
-      className='h-fit text-black/80 p-1 hover:text-red-500 rounded text-sm'>
-      <Trash2 />
-    </button>
+    </Container>
   );
 };
 

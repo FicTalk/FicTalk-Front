@@ -4,24 +4,22 @@ import { toast } from "sonner";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 import { PiCheckCircleFill } from "react-icons/pi";
-import { useUser } from "@/hooks/useUserInfo";
-import useSWRMutation from "swr/mutation";
 import { useRevalidationCookie } from "@/hooks/useAuth";
+import KakaoLogin from "react-kakao-login";
 
-/**
- * 에러일 때 에러 처리를 해줘야 함.
- * 로그아웃은 useSWRMutation로 작성됬는데 로그인도 useSWRMutation로 작성해야함.
- *
- * 유저 정보가 필요한 페이지마다 서버에 유저 정보를 요청하면 비효율적인 것 같음.
- *
- * 로그인이 성공하면 zustand에 유저 정보를 저장하고, 로그아웃 시 zustand에 저장된 유저 정보를 삭제한다
- * cookie가 유효시간이 60분인데 cookie가 없을 때 로그인이 필요한 요청을 했을 시 zustand에 저장된
- * 유저정보를 삭제하고 다시 로그인화면으로 리다이렉션을 해준다.
- *
- * zustand에 저장 시 새로고침을 하면 유저정보가 삭제될텐데 persist을 이용해서 해보자
- */
+const Kakao = () => {
+  return (
+    <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'>
+      <path
+        fillRule='evenodd'
+        clipRule='evenodd'
+        d='M9.96052 3C5.83983 3 2.5 5.59377 2.5 8.79351C2.5 10.783 3.79233 12.537 5.75942 13.5807L4.9313 16.6204C4.85835 16.8882 5.1634 17.1029 5.39883 16.9479L9.02712 14.5398C9.33301 14.5704 9.64386 14.587 9.96052 14.587C14.0812 14.587 17.421 11.9932 17.421 8.79351C17.421 5.59377 14.0812 3 9.96052 3Z'
+        fill='black'></path>
+    </svg>
+  );
+};
 
-export default function GoogleLoginButton() {
+export function GoogleLoginButton() {
   const router = useRouter();
   const { trigger } = useRevalidationCookie();
   return (
@@ -33,10 +31,10 @@ export default function GoogleLoginButton() {
         await fetch("/api/auth/google", {
           method: "POST",
           body: JSON.stringify({ idToken: credentialResponse.credential }),
-        }).then(async (res) => {
+        }).then(async () => {
           await fetch("/api/profile")
-            .then(() => {
-              trigger();
+            .then(async () => {
+              await trigger();
               toast.message("로그인이 되었습니다.", {
                 duration: 1500,
                 icon: <PiCheckCircleFill className='text-xl text-white' />,
@@ -60,5 +58,56 @@ export default function GoogleLoginButton() {
       onError={() => {
         console.log("Login Failed");
       }}></GoogleLogin>
+  );
+}
+
+export function KakaoLoginBtn() {
+  const router = useRouter();
+  const { trigger } = useRevalidationCookie();
+  return (
+    <KakaoLogin
+      style={{
+        padding: "2px 10px",
+      }}
+      token={process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID as string}
+      onSuccess={async (res) => {
+        const idToken = (res.response as never as { ["id_token"]: string }).id_token;
+        const nickname = res.profile!.properties.nickname;
+
+        await fetch("/api/auth/kakao", {
+          method: "POST",
+          body: JSON.stringify({ idToken, nickname }),
+        }).then(async () => {
+          await trigger();
+          toast.message("로그인이 되었습니다.", {
+            duration: 1500,
+            icon: <PiCheckCircleFill className='text-xl text-white' />,
+            style: {
+              backgroundColor: "#3b82f6",
+              color: "white",
+              border: 0,
+              boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+            },
+          });
+
+          router.push("/");
+          router.refresh();
+        });
+      }}
+      onFail={console.error}
+      onLogout={console.info}
+      render={({ onClick }) => {
+        return (
+          <button
+            onClick={onClick}
+            className='min-w-[220px] mx-auto flex gap-2 justify-center rounded py-2 items-center'
+            style={{ backgroundColor: "rgb(254, 229, 0)" }}>
+            <Kakao />
+            <p className='font-semibold'>카카오 로그인</p>
+          </button>
+        );
+      }}>
+      카카오로 로그인하기
+    </KakaoLogin>
   );
 }
