@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { toast } from "sonner";
 import useSWRMutation from "swr/mutation";
 
