@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   const webtoonId = await req.json();
   const cookieStore = cookies();
   const authToken = cookieStore.get("auth-token");
-  const getData = await fetch("https://api.woos.dev/api/alarms", {
+  const getData = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/alarms", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

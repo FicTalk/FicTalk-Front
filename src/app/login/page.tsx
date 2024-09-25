@@ -1,6 +1,7 @@
 "use client";
 
-import { GoogleLoginButton, KakaoLoginBtn } from "@/components/LoginButton";
+import { GoogleLoginButton } from "@/components/LoginButton";
+import { KakaoLoginBtn } from "@/components/LoginButton";
 
 export default function Login() {
   return (

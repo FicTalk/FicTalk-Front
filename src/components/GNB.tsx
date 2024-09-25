@@ -53,6 +53,26 @@ const IsUser = ({ data, error, isLoading, trigger, isMutating }: Props) => {
   );
 };
 
+const HomeBtn = ()=>{
+  return         <Link href='/' className='group p-1 flex flex-col gap-0.5'>
+  <Home className='group-hover:text-black text-black/70 transition mx-auto' />
+  <p className='text-xs group-hover:text-black text-black/70 transition text-center'>홈</p>
+</Link>
+}
+
+const MenuBtn = () => {
+  const { onChange, toggle } = useSideMenuToggle();
+  const onClick = () => {
+    onChange(!toggle);
+  };
+  return        <div className='group p-1 flex flex-col gap-0.5'>
+  <button onClick={onClick} className='p-0'>
+    <MenuIcon className='group-hover:text-black text-black/70 transition mx-auto' />
+  </button>
+  <p className='text-xs group-hover:text-black text-black/70 transition text-center leading-none'>메뉴</p>
+</div>
+}
+
 const CreatePostBtn = ({ data, error, isLoading, trigger, isMutating }: Props) => {
   const router = useRouter();
 
@@ -94,34 +114,29 @@ const CreatePostBtn = ({ data, error, isLoading, trigger, isMutating }: Props) =
   );
 };
 
+const WebtoonBtn = () => {
+  return (
+      <Link href='/webtoons' className='group p-1 flex flex-col gap-0.5'>
+          <Book className='group-hover:text-black text-black/70 transition mx-auto' />
+          <p className='text-xs group-hover:text-black text-black/70 transition text-center'>웹툰</p>
+        </Link>
+  )
+}
+
 export default function GNB() {
-  const { onChange, toggle } = useSideMenuToggle();
+
 
   const { data, error, isLoading } = useCookie();
   const { trigger, isMutating } = useRevalidationCookie();
 
-  const onClick = () => {
-    onChange(!toggle);
-  };
   return (
     <header className='fixed z-20 w-full max-w-[600px] bottom-0 bg-white border-t'>
       <nav className='px-5 py-3 flex justify-between'>
-        <Link href='/' className='group p-1 flex flex-col gap-0.5'>
-          <Home className='group-hover:text-black text-black/70 transition mx-auto' />
-          <p className='text-xs group-hover:text-black text-black/70 transition text-center'>홈</p>
-        </Link>
-        <div className='group p-1 flex flex-col gap-0.5'>
-          <button onClick={onClick} className='p-0'>
-            <MenuIcon className='group-hover:text-black text-black/70 transition mx-auto' />
-          </button>
-          <p className='text-xs group-hover:text-black text-black/70 transition text-center leading-none'>메뉴</p>
-        </div>
+        <HomeBtn />
+        <WebtoonBtn />
         <IsUser data={data} isLoading={isLoading} error={error} trigger={trigger} isMutating={isMutating} />
-        <Link href='/webtoons' className='group p-1 flex flex-col gap-0.5'>
-          <Book className='group-hover:text-black text-black/70 transition mx-auto' />
-          <p className='text-xs group-hover:text-black text-black/70 transition text-center'>웹툰</p>
-        </Link>
         <CreatePostBtn data={data} isLoading={isLoading} error={error} trigger={trigger} isMutating={isMutating} />
+        <MenuBtn />
       </nav>
     </header>
   );

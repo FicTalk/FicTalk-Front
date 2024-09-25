@@ -45,8 +45,7 @@ export function GoogleLoginButton() {
                   boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
                 },
               });
-              router.push("/");
-              router.refresh();
+              router.replace("/");
             })
             .catch(() => {
               toast.error("로그인에 실패하였습니다..", {
@@ -77,7 +76,8 @@ export function KakaoLoginBtn() {
         await fetch("/api/auth/kakao", {
           method: "POST",
           body: JSON.stringify({ idToken, nickname }),
-        }).then(async () => {
+        })
+        .then(async () => {
           await trigger();
           toast.message("로그인이 되었습니다.", {
             duration: 1500,
@@ -89,9 +89,7 @@ export function KakaoLoginBtn() {
               boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
             },
           });
-
-          router.push("/");
-          router.refresh();
+          router.replace("/");
         });
       }}
       onFail={console.error}

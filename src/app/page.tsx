@@ -1,9 +1,28 @@
 import Slider from "@/components/Slider";
 import { HotPost } from "@/types/Posts";
 import { Webtoon } from "@/types/webtoon";
+import Link from "next/link";
 import { HiOutlineChatBubbleLeftEllipsis, HiOutlineHandThumbUp } from "react-icons/hi2";
 
-const fetching = async (url: string) => await fetch(url, { next: { revalidate: 0 } }).then((res) => res.json());
+const fetching = async (url: string) => await fetch(url, { next: { revalidate: 60*60 } }).then((res) => res.json());
+
+const List = ({data} : {data: HotPost[]}) => {
+  return data.map(item =>
+    <Link key={item.id} href={`/posts/${item.id}`} className='flex flex-col gap-1 px-2 border-b py-2 first:border-t last:border-none' >
+    <div className='flex items-center gap-2'>
+      <p className='text-black/70 flex items-center gap-0.5 text-xs font-medium'>
+        <HiOutlineHandThumbUp />
+        {item.likeCount}
+      </p>
+      <p className='text-black/70 flex items-center gap-0.5 text-xs font-medium'>
+        <HiOutlineChatBubbleLeftEllipsis />
+        {item.likeCount}
+      </p>
+    </div>
+    <p className='font-medium text-sm'>{item.title}</p>
+  </Link>
+  )
+}
 
 export default async function Home() {
   const datas = await fetching(process.env.NEXT_PUBLIC_API_URL + "/api/home");
@@ -17,30 +36,16 @@ export default async function Home() {
       <section className='mx-2 bg-white rounded'>
         <h3 className='font-bold text-base p-2'>추천 게시글</h3>
         <div className='rounded'>
-          {datas.hotPosts.map((item: HotPost) => (
-            <div className='flex flex-col gap-1 px-2 border-b py-2 first:border-t last:border-none' key={item.id}>
-              <div className='flex items-center gap-2'>
-                <p className='text-black/70 flex items-center gap-0.5 text-xs font-medium'>
-                  <HiOutlineHandThumbUp />
-                  {item.likeCount}
-                </p>
-                <p className='text-black/70 flex items-center gap-0.5 text-xs font-medium'>
-                  <HiOutlineChatBubbleLeftEllipsis />
-                  {item.likeCount}
-                </p>
-              </div>
-              <p className='font-medium text-sm'>{item.title}</p>
-            </div>
-          ))}
+          <List data={datas.hotPosts} />
         </div>
       </section>
       <section className='mx-2 bg-white rounded'>
         <h3 className='font-bold text-base p-2'>알람 등록 순위</h3>
         <div className='flex flex-wrap'>
           {datas.topAlarmWebtoons.map((item: Webtoon) => (
-            <div key={item.id} className='basis-1/3 rounded overflow-hidden border p-2'>
+            <Link target="_blank" href={item.link} key={item.id} className='basis-1/3 rounded overflow-hidden border p-2'>
               <img src={item.thumbnailUrl} className='aspect-[3/4] w-full object-cover rounded' />
-            </div>
+            </Link>
           ))}
         </div>
       </section>

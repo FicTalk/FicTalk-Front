@@ -57,7 +57,7 @@ export const usePostSubmit = () => {
       toast.success(postId ? "수정이 완료되었습니다." : "글쓰기에 성공하셨습니다", {
         duration: 1500,
       });
-      router.push("/posts");
+      router.replace("/posts");
     } catch (error) {
       toast.error("글쓰기에 실패했습니다.", {
         duration: 1500,
