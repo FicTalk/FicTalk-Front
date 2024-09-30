@@ -4,7 +4,7 @@ import { DayOfWeek, getDayInKorean } from "@/lib/strings";
 import { cn } from "@/lib/utils";
 import { ReactNode } from "react";
 import { PiEyesFill } from "react-icons/pi";
-import PlatformBadge from "./PlatformBadge";
+import PlatformBadge from "./platformBadge";
 import { toast } from "sonner";
 
 interface Props {

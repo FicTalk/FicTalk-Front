@@ -3,15 +3,15 @@
 import dayjs from "dayjs";
 import Link from "next/link";
 import { PiUser } from "react-icons/pi";
-import Container from "@/components/Container";
-import Title from "@/components/Title";
+import Container from "@/components/container";
+import Title from "@/components/title";
 import { Edit, Trash2 } from "lucide-react";
 import { useDeletePost, useGetPost } from "@/hooks/usePost";
 import { useUserInfo } from "@/hooks/useUserInfo";
 import DOMPurify from "dompurify";
 import { useRouter } from "next/navigation";
-import PostLikeBtn from "@/components/PostLikeBtn";
-import PostUnLikeBtn from "@/components/PostUnLikeBtn";
+import PostLikeBtn from "@/components/btn/postLikeBtn";
+import PostUnLikeBtn from "@/components/btn/postUnLikeBtn";
 
 const EditBtn = ({ id, post }: { id: string; post: { username: string } }) => {
 	const { data, isLoading, error } = useUserInfo();

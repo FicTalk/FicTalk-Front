@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import GNB from "@/components/GNB";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import SideMenu from "@/components/SideMenu";
-import GoogleLoginProvider from "@/components/GoogleLoginProvier";
+import { ThemeProvider } from "@/components/themeProvider";
+import SideMenu from "@/components/sideMenu";
+import GoogleLoginProvider from "@/components/googleLoginProvier";
 import { Toaster } from "@/components/ui/sonner";
 const pretendard = localFont({
 	src: "../assets/fonts/PretendardVariable.woff2",

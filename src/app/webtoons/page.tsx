@@ -1,20 +1,20 @@
 "use client";
 
-import Paginate from "@/components/Paginate";
+import Paginate from "@/components/paginate";
 import { useItems } from "@/hooks/useWebtoons";
 import { useSearchParams } from "next/navigation";
 import { PiBellFill, PiCheckCircleFill, PiWarningCircleFill } from "react-icons/pi";
 import { useUpdateSearchParams } from "@/hooks/useUpdateSearchParam";
-import React, { Suspense, useCallback, useEffect, useMemo } from "react";
-import { Combobox } from "@/components/ComboBox";
-import { SearchWebtoon } from "@/components/SearchWebtoon";
+import React, { useCallback, useEffect, useMemo } from "react";
+import { Combobox } from "@/components/comboBox";
+import { SearchWebtoon } from "@/components/searchWebtoon";
 import { useAlertWebtoons, useCreateAlertWebtoon, useDeleteAlertWebtoon } from "@/hooks/useAlertWebtoon";
-import Card from "@/components/Card";
+import Card from "@/components/card";
 import { toast } from "sonner";
 import { usePageTotal } from "@/store/webtoons";
 import { usePagination } from "@/hooks/usePagination";
-import Title from "@/components/Title";
-import Container from "@/components/Container";
+import Title from "@/components/title";
+import Container from "@/components/container";
 import { Webtoon } from "@/types/webtoon";
 
 /**
@@ -164,9 +164,7 @@ export default function Webtoons() {
 				<ComboBoxes />
 			</div>
 			<SearchWebtoon />
-			<Suspense>
-				<WebtoonList />
-			</Suspense>
+			<WebtoonList />
 			<Page />
 		</Container>
 	);

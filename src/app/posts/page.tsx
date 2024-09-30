@@ -2,16 +2,16 @@
 
 import dayjs from "dayjs";
 import Link from "next/link";
-import Paginate from "@/components/Paginate";
+import Paginate from "@/components/paginate";
 import { usePageTotal } from "@/store/posts";
 import { usePagination } from "@/hooks/usePagination";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
 import React from "react";
 import { useGetPosts } from "@/hooks/usePost";
-import Title from "@/components/Title";
-import Container from "@/components/Container";
-import { Post } from "@/types/Posts";
+import Title from "@/components/title";
+import Container from "@/components/container";
+import { Post } from "@/types/posts";
 
 /**
  * Pagination
