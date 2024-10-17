@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
-import GNB from '@/components/GNB'
-import { ThemeProvider } from '@/components/ThemeProvider'
-import SideMenu from '@/components/SideMenu'
-import GoogleLoginProvider from '@/components/GoogleLoginProvier'
-import { Toaster } from '@/components/ui/sonner'
+import GNB from '@components/GNB'
+import { ThemeProvider } from '@components/ThemeProvider'
+import SideMenu from '@components/SideMenu'
+import GoogleLoginProvider from '@components/GoogleLoginProvier'
+import { Toaster } from '@components/ui/sonner'
 import { ReactNode } from 'react'
 
 const pretendard = localFont({

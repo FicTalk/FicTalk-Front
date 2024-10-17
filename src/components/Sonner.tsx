@@ -1,5 +1,5 @@
-import { toast } from "sonner";
-import { Button } from "@/components/ui/button";
+import { toast } from 'sonner'
+import { Button } from '@components/ui/button'
 
 /**
  * 알람 해제했을 때, 알람 설정했을 때, 로그인 했을 때, 로그아웃 했을 때
@@ -7,17 +7,18 @@ import { Button } from "@/components/ui/button";
  */
 
 export function SonnerDemo() {
-  return (
-    <Button
-      variant='outline'
-      onClick={() =>
-        toast.success("로그인 완료", {
-          description: "환영합니다! 성공적으로 로그인되었습니다.",
-          duration: 1500,
-          icon: "🎉",
-        })
-      }>
-      Show Toast
-    </Button>
-  );
+    return (
+        <Button
+            variant="outline"
+            onClick={() =>
+                toast.success('로그인 완료', {
+                    description: '환영합니다! 성공적으로 로그인되었습니다.',
+                    duration: 1500,
+                    icon: '🎉',
+                })
+            }
+        >
+            Show Toast
+        </Button>
+    )
 }
